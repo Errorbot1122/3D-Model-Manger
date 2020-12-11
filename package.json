@@ -1,0 +1,28 @@
+{
+  "name": "3d-model-manger",
+  "version": "1.0.0",
+  "description": "A 3D Model Manger",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErrorBot1122/3D-Model-Manger.git"
+  },
+  "keywords": [
+    "3D",
+    "3d",
+    "3D-Model",
+    "3d-Manger",
+    "obj",
+    "obj-files",
+    "OBJ-Manger"
+  ],
+  "author": "Errorbot1122",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ErrorBot1122/3D-Model-Manger/issues"
+  },
+  "homepage": "https://github.com/ErrorBot1122/3D-Model-Manger#readme"
+}
