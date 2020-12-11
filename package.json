@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/ErrorBot1122/3D-Model-Manger/issues"
   },
-  "homepage": "https://github.com/ErrorBot1122/3D-Model-Manger#readme"
+  "homepage": "https://github.com/ErrorBot1122/3D-Model-Manger#readme",
+  "dependencies": {
+    "mime-types": "^2.1.27"
+  }
 }
