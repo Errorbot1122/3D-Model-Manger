@@ -30,11 +30,11 @@ function readModel(filePath) {
 };
 
 function parseRead(Modeldata) {
-  console.log(Modeldata)
+  console.log(Modeldata.modelData)
 }
 
 /* Testing */
-readModel("../Test/cube.obj")
+parseRead(readModel("../Test/cube.obj"));
 
 /* Exports */
 module.exports.readModel = readModel;
