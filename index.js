@@ -1,3 +1,6 @@
+const mime = require('mime-types');
+const fs = require('fs');
+
 module.exports = (filePath) => {
   let fileExists = false;
 
@@ -10,6 +13,17 @@ module.exports = (filePath) => {
   }
 
   if (fileExists) {
-    if 
+
+    let contentType = mime.lookup(filePath).split("/");
+    let fileData = fs.readfileAsync(filePath, "binary");
+
+
+    if (contentType[0] == "model") {
+      switch (contentType[1]) {
+        case "obj":
+          
+          break;
+      }
+    }
   }
-}
+};
