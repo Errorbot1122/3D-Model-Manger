@@ -15,8 +15,7 @@ module.exports = (filePath) => {
   if (fileExists) {
 
     let contentType = mime.lookup(filePath).split("/");
-    let fileData = fs.readfileAsync(filePath, "binary");
-
+    let fileData = fs.readFileSync(filePath, "binary");
 
     if (contentType[0] == "model") {
       switch (contentType[1]) {
