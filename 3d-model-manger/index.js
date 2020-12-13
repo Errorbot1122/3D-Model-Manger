@@ -168,7 +168,7 @@ function parseRead(Modeldata, options) {
 
 /* Testing */
 
-//console.log(parseRead(readModel("../Test/cube.obj")));
+//console.log(parseRead(readModel("cube.obj")));
 
 /* Exports */
 
@@ -186,5 +186,3 @@ module.exports.classes.Vertex = Vertex;
 module.exports.classes.BasePolygon = BasePolygon;
 module.exports.classes.Polygon = Polygon;
 module.exports.classes.Polygon = Face;
-
-  /* */
