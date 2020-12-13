@@ -4,10 +4,14 @@ const mime = require('mime-types');
 const fs = require('fs');
 
 let vertexArray = []
+let faceArray = []
 
 
 function IsString(x) {
   return (typeof x === 'string' || x instanceof String)
+}
+function IsNumber(x) {
+  return (typeof x === 'number' || x instanceof Number)
 }
 function IsBool(x) {
   return (typeof x === 'boolean' || x instanceof Boolean)
@@ -56,7 +60,9 @@ function objLineToClass(item, type) {
       output = new Vertex(data[1], data[2], data[3], (data[4] != null) ? data[4] : null)
       break;
     case "f":
-      output = new Face()
+      vNumbers = [data[1].split("/")[0], data[2].split("/")[0], data[3].split("/")[0], (data[4] != null) ? data[4].split("/")[0] : null]
+      output = new Face(vertexArray[parseInt(vNumbers[0])], vertexArray[parseInt(vNumbers[1])], vertexArray[parseInt(vNumbers[2])], (vNumbers[3] != null) ? vertexArray[parseInt(vNumbers[3])] : null)
+      break;
     default:
       output = false;
       break;
@@ -86,7 +92,7 @@ class Vertex extends Vector3 {
 
 class BasePolygon {
   constructor(...vertices) {
-    this.vertices = vertices
+    this.vertices = vertices[0]
   }
 }
 class Polygon extends BasePolygon {
@@ -96,24 +102,16 @@ class Polygon extends BasePolygon {
 }
 class Face extends Polygon{
   constructor(v1, v2, v3, v4) {
-    super(v1, v2, v3, v4)
-    this.v1 = this.vertices[0]
-    this.v2 = this.vertices[1]
-    this.v3 = this.vertices[2]
-    this.v4 = this.vertices[3]
+    super(v1, v2, v3, v4);
+    this.v1 = this.vertices[0];
+    this.v2 = this.vertices[1];
+    this.v3 = this.vertices[2];
+    this.v4 = this.vertices[3];
   }
 }
 
 function readModel(filePath) {
-  let fileExists = false;
-
-  try {
-    if (fs.existsSync(filePath)) {
-      fileExists = true
-    }
-  } catch(err) {
-    throw new Error(err);
-  }
+  let fileExists = fs.existsSync(filePath)
 
   if (fileExists) {
 
@@ -128,11 +126,12 @@ function readModel(filePath) {
 
     }
   }
-}
+};
 function parseRead(Modeldata, options) {
-  let keepComments = false
+  let keepComments = false;
   let returnObject = {
-    Vertexs: [],
+    Vertices: [],
+    Faces: []
   }
 
   if (IsObject(options)) {
@@ -143,11 +142,10 @@ function parseRead(Modeldata, options) {
 
 
   if (!keepComments) {
-    let modelDataArrayFilterd = filterRegex(modelDataArray, /^#/)
+    let modelDataArrayFilterd = filterRegex(modelDataArray, /^#/);
 
-    modelDataArray = modelDataArrayFilterd
+    modelDataArray = modelDataArrayFilterd;
   }
-  //console.log(modelDataArray)
 
   modelDataArray.forEach((item, i) => {
 
@@ -155,19 +153,38 @@ function parseRead(Modeldata, options) {
       let newItem = objLineToClass(item)
 
       if (newItem instanceof Vertex) {
-        vertexArray.push(newItem) 
+        vertexArray.push(newItem)
+      }
+      else if (newItem instanceof Face) {
+        faceArray.push(newItem)
       }
     }
   });
 
+  returnObject.Vertices = vertexArray;
+  returnObject.Faces = faceArray;
   return returnObject;
 };
 
 /* Testing */
 
-console.log(parseRead(readModel("../Test/cube.obj")));
-//testVector = new Vector(1, 2, 4, 3);
+//console.log(parseRead(readModel("../Test/cube.obj")));
 
 /* Exports */
+
+  /* Export Functions */
 module.exports.readModel = readModel;
 module.exports.parseRead = parseRead;
+
+  /* Export Classes */
+    /* Vertex Stuff */
+module.exports.classes.Vector = Vector;
+module.exports.classes.Vector3 = Vector3;
+module.exports.classes.Vertex = Vertex;
+
+    /* Shape Stuff */
+module.exports.classes.BasePolygon = BasePolygon;
+module.exports.classes.Polygon = Polygon;
+module.exports.classes.Polygon = Face;
+
+  /* */
