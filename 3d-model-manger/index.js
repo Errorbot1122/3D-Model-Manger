@@ -3,6 +3,9 @@
 const mime = require('mime-types');
 const fs = require('fs');
 
+let vertexArray = []
+
+
 function IsString(x) {
   return (typeof x === 'string' || x instanceof String)
 }
@@ -14,53 +17,52 @@ function IsObject(x) {
 }
 
 function filterRegex(array, regex, isReverse = true) {
-  let output = []
+
   let arrayFilterd = array.filter((elem, i) => {
     if (IsString(elem)) {
       if (isReverse) {
 
-        output.push(!regex.test(elem))
+        return !regex.test(elem)
       }
       else {
 
-        output.push(regex.test(elem))
+        return regex.test(elem)
       }
     }
     else {
 
       if (isReverse) {
 
-        output.push(true)
+        return true
       }
       else {
 
-        output.push(false)
+        false
       }
     }
   });
+  return arrayFilterd;
+};
+function objLineToClass(item, type) {
+  let output
+  if (!IsString(item)) {return}
+  let data = item.trim().split(" ");
+  if (!IsString(type))  {
+    type = data[0]
+  }
 
+  switch (type) {
+    case "v":
+      output = new Vertex(data[1], data[2], data[3], (data[4] != null) ? data[4] : null)
+      break;
+    case "f":
+      output = new Face()
+    default:
+      output = false;
+      break;
+  }
   return output;
-}
-
-function arrayToClass(array) {
-  array.forEach((item, i) => {
-    let data = item.trim().split(" ");
-
-    let type = data[0];
-
-    let output
-
-    switch (data[0]) {
-      case "v":
-        output = new Vertex(data[1], data[2], data[3], (data[4] != null) ? data[4] : null)
-        break;
-      default:
-        break;
-    }
-
-  });
-
-}
+};
 
 class Vector {
   constructor(...values) {
@@ -79,6 +81,26 @@ class Vertex extends Vector3 {
   constructor(x, y, z, w = 1) {
     super(x, y, z)
     this.w = w
+  }
+}
+
+class BasePolygon {
+  constructor(...vertices) {
+    this.vertices = vertices
+  }
+}
+class Polygon extends BasePolygon {
+  constructor(...vertices) {
+    super(vertices)
+  }
+}
+class Face extends Polygon{
+  constructor(v1, v2, v3, v4) {
+    super(v1, v2, v3, v4)
+    this.v1 = this.vertices[0]
+    this.v2 = this.vertices[1]
+    this.v3 = this.vertices[2]
+    this.v4 = this.vertices[3]
   }
 }
 
@@ -106,20 +128,18 @@ function readModel(filePath) {
 
     }
   }
-};
-
+}
 function parseRead(Modeldata, options) {
   let keepComments = false
-  let returnArray
+  let returnObject = {
+    Vertexs: [],
+  }
 
   if (IsObject(options)) {
     let keepComments = (IsBool(options.keepComments)) ? options.keepComments : false
   }
 
-
-  let modelDataArray = Modeldata.modelData
-    .trim()
-    .split("\n");
+  let modelDataArray = Modeldata.modelData.trim().split("\n");
 
 
   if (!keepComments) {
@@ -127,15 +147,21 @@ function parseRead(Modeldata, options) {
 
     modelDataArray = modelDataArrayFilterd
   }
+  //console.log(modelDataArray)
 
   modelDataArray.forEach((item, i) => {
 
     if (IsString(item)) {
-      let vertexsFromRead = filterRegex(modelDataArray, vertexRegex, false)
-      let vertexsFromReadClass = arrayToClass(modelDataArray)
+      let newItem = objLineToClass(item)
+
+      if (newItem instanceof Vertex) {
+        vertexArray.push(newItem) 
+      }
     }
   });
-}
+
+  return returnObject;
+};
 
 /* Testing */
 
