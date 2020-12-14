@@ -1,6 +1,6 @@
 {
   "name": "3d-model-manger",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "A 3D Model Manger",
   "main": "index.js",
   "scripts": {

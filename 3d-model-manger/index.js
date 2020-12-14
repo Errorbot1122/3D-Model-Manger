@@ -1,4 +1,9 @@
 /* Defantions */
+/**
+  * @description a 3D model manger for node.js
+  * @module 3D-Model-Manger
+  */
+
 
 const mime = require('mime-types');
 const fs = require('fs');
@@ -110,10 +115,18 @@ class Face extends Polygon{
   }
 }
 
+/**
+  * @function readModel
+  * @description Reads file data from 3d model files (obj)
+  *
+  * @param  {String} filePath The path of a file
+  *
+  * @returns {String[]}  Each line of the file
+  */
 function readModel(filePath) {
   let fileExists = fs.existsSync(filePath)
 
-  if (fileExists) {
+  if (fileExists == true) {
 
     let contentType = mime.lookup(filePath).split("/");
     let fileData = fs.readFileSync(filePath, "utf8");
@@ -125,8 +138,24 @@ function readModel(filePath) {
           };
 
     }
+    else {
+      throw new Error(`the file ${filePath.split("/")[filePath.split("/").length - 1]} at ${filePath} is not a 3d model file`);
+    }
+  }
+  else {
+      throw new Error(`The file ${filePath.split("/")[filePath.split("/").length - 1]} dose not exist at file path: ${filePath}`)
   }
 };
+
+/**
+  * @function parseRead
+  * @description Parses the array given by the readModel() function
+  *
+  * @param  {String[]} Modeldata The path of a file
+  * @param  {Object}  [options] options
+  *
+  * @returns {{Vertices: Vertex[], Faces: Face[]}}  Each line of the file
+  */
 function parseRead(Modeldata, options) {
   let keepComments = false;
   let returnObject = {
@@ -168,8 +197,11 @@ function parseRead(Modeldata, options) {
 
 /* Testing */
 
-//console.log(parseRead(readModel("cube.obj")));
 
+console.log(/*parseRead(*/readModel("cube.obj"))//);
+
+
+console.log()
 /* Exports */
 
   /* Export Functions */
@@ -177,6 +209,7 @@ module.exports.readModel = readModel;
 module.exports.parseRead = parseRead;
 
   /* Export Classes */
+module.exports.classes = {}
     /* Vertex Stuff */
 module.exports.classes.Vector = Vector;
 module.exports.classes.Vector3 = Vector3;
