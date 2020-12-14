@@ -89,7 +89,7 @@ Parses the object given by the `readModel()` function and converts it into an ea
 Parameter | Type | Default | Description
 :-:|:-:|:-:|:-:
 **Modeldata** | *String* | &#x274C; | The Path <br /> of the read file
-**options** | *Object* | &#x2714; | The Path <br /> of the read file
+**options** | *Object* | &#x2714; | options
 
 **Example:**
 
