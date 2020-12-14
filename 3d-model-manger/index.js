@@ -197,11 +197,8 @@ function parseRead(Modeldata, options) {
 
 /* Testing */
 
+//console.log(parseRead(readModel("cube.obj")));
 
-console.log(/*parseRead(*/readModel("cube.obj"))//);
-
-
-console.log()
 /* Exports */
 
   /* Export Functions */
